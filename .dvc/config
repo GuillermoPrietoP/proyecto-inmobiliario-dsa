@@ -1,0 +1,4 @@
+[core]
+    remote = almacenamiento_s3
+['remote "almacenamiento_s3"']
+    url = s3://miad-proyecto-inmobiliario/dvc-storage
