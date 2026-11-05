@@ -1,0 +1,4 @@
+modelo,variables,mae_validacion_2022,mae_baseline_2022,diferencia_baseline
+Random Forest base,"municipio,year_radica",132447816,123569926,-8877890
+Random Forest ampliado,"municipio,year_radica,num_anotacion,count_a,count_de",132944972,123569926,-9375047
+Hist Gradient Boosting,"municipio,year_radica,num_anotacion,count_a,count_de",138926094,123569926,-15356168
