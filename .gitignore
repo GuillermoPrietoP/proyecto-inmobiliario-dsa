@@ -1,2 +1,4 @@
 /datos_inmobiliarios.csv
 /mlflow.db
+__pycache__/
+/mlartifacts/
