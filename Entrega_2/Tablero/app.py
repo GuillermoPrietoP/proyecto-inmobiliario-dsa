@@ -45,7 +45,42 @@ if page in ['Inicio','Comparación']:
     chart(px.bar(s,x='municipio',y='mediana',color='municipio',color_discrete_sequence=COLORS,labels={'municipio':'Municipio','mediana':'Mediana · COP de 2023'},title='Valores registrados: comparación de medianas'))
     yearly=f.groupby(['year_radica','municipio'])[TARGET].median().reset_index()
     chart(px.line(yearly,x='year_radica',y=TARGET,color='municipio',markers=True,color_discrete_sequence=COLORS,labels={'year_radica':'Año','valor_real_2023':'Mediana · COP de 2023'},title='Evolución histórica del valor central'))
-    st.dataframe(s.rename(columns={'municipio':'Municipio','operaciones':'Operaciones','mediana':'Mediana COP 2023','q1':'Q1 COP 2023','q3':'Q3 COP 2023'}),hide_index=True)
+    
+    tabla = s.rename(columns={
+        'municipio': 'Municipio',
+        'operaciones': 'Operaciones',
+        'mediana': 'Mediana',
+        'q1': 'Q1',
+        'q3': 'Q3'
+    }).copy()
+
+    for columna in ['Mediana', 'Q1', 'Q3']:
+        tabla[columna] = tabla[columna] / 1_000_000
+
+    st.subheader('Resumen comparativo por municipio')
+    st.caption('Valores monetarios en millones de COP constantes de 2023')
+
+    st.dataframe(
+        tabla,
+        hide_index=True,
+        width='stretch',
+        column_config={
+            'Municipio': st.column_config.TextColumn('Municipio'),
+            'Operaciones': st.column_config.NumberColumn(
+                'Operaciones', format='%,d'
+            ),
+            'Mediana': st.column_config.NumberColumn(
+                'Mediana (M COP)', format='%.1f'
+            ),
+            'Q1': st.column_config.NumberColumn(
+                'Q1 (M COP)', format='%.1f'
+            ),
+            'Q3': st.column_config.NumberColumn(
+                'Q3 (M COP)', format='%.1f'
+            )
+        }
+    )
+
     st.caption('Un mayor volumen de registros no prueba rentabilidad ni permite comparar inmuebles equivalentes.')
 elif page=='Por municipio':
     m=st.selectbox('Municipio a consultar',sorted(f.municipio.unique()))
