@@ -195,7 +195,7 @@ def main():
     parser.add_argument("--salida", type=Path, default=Path("datos_modelos_enriquecido.csv"))
     args = parser.parse_args()
     carpeta = args.proyecto / "Bases Complementarias"
-    ruta = args.proyecto / "proyecto-inmobiliario-dsa/Entrega_2/Analisis de datos/datos_modelos_completo.csv"
+    ruta = args.proyecto / "proyecto-inmobiliario-dsa/Entrega_2/Exploracion/datos_filtrados_reproducidos.csv"
     exigir(args.salida.resolve() != ruta.resolve(), "La salida coincide con el CSV original.")
     base = pd.read_csv(ruta, float_precision="round_trip")
     base["cod_municipio"] = base.municipio.map(CODIGOS)

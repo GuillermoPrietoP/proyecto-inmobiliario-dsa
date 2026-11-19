@@ -9,12 +9,43 @@ from sklearn.base import clone
 
 
 # 1. Cargar la base desde la carpeta donde está este script
-ruta_csv = Path(__file__).resolve().with_name("datos_modelos_enriquecido.csv")
+ruta_csv = Path(__file__).resolve().with_name("datos_modelos_enriquecido_nuevo.csv")
 datos = pd.read_csv(ruta_csv)
 
-objetivo = "valor_real_2023"
-claves = ["municipio", "year_radica"]
+# Variación anual del IPC nacional a diciembre, en porcentaje.
+ipc_anual_pct = pd.Series({
+    2016: 5.75,
+    2017: 4.09,
+    2018: 3.18,
+    2019: 3.80,
+    2020: 1.61,
+    2021: 5.62,
+    2022: 13.12,
+    2023: 9.28,
+})
 
+anio_base = 2023
+factor_por_anio = pd.Series({
+    anio: (1 + ipc_anual_pct.loc[anio + 1:anio_base] / 100).prod()
+    for anio in range(2015, anio_base + 1)
+})
+
+filtro_monetario = (
+    datos["valor"].gt(0)
+    & datos["tiene_mas_de_un_valor"].eq(0)
+)
+datos = datos.loc[filtro_monetario].copy()
+datos["factor_ipc"] = datos["year_radica"].map(factor_por_anio)
+
+if datos["factor_ipc"].isna().any():
+    raise ValueError("Hay años de radicación sin factor de ajuste por IPC.")
+
+datos["valor_cop_dic2023"] = (
+    datos["valor"] * datos["factor_ipc"]
+)
+
+objetivo = "valor_cop_dic2023"
+claves = ["municipio", "year_radica"]
 
 # 2. Crear las variables derivadas
 grupos_edad = {
@@ -57,12 +88,12 @@ datos["viviendas_por_1000"] = (
 )
 
 # Ajustar el valor agregado con el IPC del mismo año del dato económico.
-ipc_anual = datos[["year_radica", "ipc_diciembre"]].dropna().drop_duplicates()
+ipc_anual = datos[["year_radica", "factor_ipc"]].dropna().drop_duplicates()
 
 if ipc_anual["year_radica"].duplicated().any():
     raise ValueError("Hay más de un IPC de diciembre para un mismo año.")
 
-ipc_por_anio = ipc_anual.set_index("year_radica")["ipc_diciembre"]
+ipc_por_anio = ipc_anual.set_index("year_radica")["factor_ipc"]
 ipc_2023 = ipc_por_anio.loc[2023]
 ipc_rezagado = (datos["year_radica"] - 2).map(ipc_por_anio)
 
@@ -176,6 +207,26 @@ for nombre, variables in variantes.items():
 
     modelo.fit(entrenamiento[variables], y_train)
     prediccion = modelo.predict(validacion[variables])
+        # Error absoluto en millones de pesos de diciembre de 2023
+    error_millones = (y_valid - prediccion).abs() / 1_000_000
+
+    print(f"\nErrores de {nombre} · Validación 2022")
+    print(f"MAE:                  {error_millones.mean():,.2f} millones")
+    print(f"Error absoluto mediano: {error_millones.median():,.2f} millones")
+    print(f"Percentil 90 del error:  {error_millones.quantile(0.90):,.2f} millones")
+
+    detalle = validacion[["municipio"]].copy()
+    detalle["error_millones"] = error_millones
+
+    resumen_errores = detalle.groupby("municipio")["error_millones"].agg(
+        registros="size",
+        mae="mean",
+        error_mediano="median",
+        p90=lambda errores: errores.quantile(0.90),
+    )
+
+    print("\nErrores por municipio · Millones de pesos de 2023")
+    print(resumen_errores.round(2).to_string())
     errores[nombre] = (y_valid - prediccion).abs()
 
 
