@@ -1,6 +1,6 @@
 # API del GAM inmobiliario — versión experimental
 
-Paquete para incorporar como `Entrega_3/API_GAM/` al repositorio del equipo.
+Paquete para incorporar como `api_gam/` al repositorio del equipo.
 El modelo, sus clases y sus resultados proceden del paquete GAM de Jeci. La API es una nueva capa de servicio; no representa un nuevo entrenamiento ni una selección del modelo ganador.
 
 ## Arranque en Windows (PowerShell, Python 3.12)
@@ -93,6 +93,29 @@ Revisar y ejecutar el código, entender las entradas/salidas y coordinar con el 
 
 ## Modelo y versiones
 
-Artefacto `resultados_gam/2023/modelo.joblib`: entrenamiento 2015–2022, evaluación retrospectiva 2023. Contexto derivado del mismo archivo enriquecido del paquete. No se incluye el CSV completo ni el historial mlruns en la imagen del servicio.
+`resultados_gam/2023/modelo.joblib`: entrenamiento 2015–2022, evaluación retrospectiva 2023. Contexto derivado del mismo archivo enriquecido del paquete.
 
 El protocolo original registra Python 3.11.9, mientras el LEEME recomienda 3.12. Se propone 3.12 para Docker y Windows, conservando las versiones científicas del paquete. Repetir las pruebas al instalar o construir en el equipo de destino. Solo cargar artefactos joblib de procedencia conocida.
+
+## Despliegue de prueba en AWS — 21/11/2026
+
+API ejecutada con Docker en una instancia EC2 Ubuntu.
+
+Documentación interactiva: http://18.205.25.216:8001/docs
+
+### Cómo probarla
+
+1. Abrir la documentación.
+2. Expandir POST /predict y pulsar Try it out.
+3. Copiar el contenido de ejemplo.json en el cuerpo de la solicitud.
+4. Pulsar Execute.
+
+Pruebas realizadas en AWS:
+- GET /health: HTTP 200 y modelo_cargado: true.
+- POST /predict con ejemplo.json: HTTP 200.
+- Predicción obtenida: 100493070.46294704 COP constantes de diciembre de 2023.
+
+El acceso depende de que la instancia y el laboratorio estén activos.
+La IP pública puede cambiar al detener e iniciar la instancia.
+
+La integración con el tablero está pendiente.
