@@ -12,7 +12,7 @@ from time import perf_counter
 from lightgbm import LGBMRegressor, log_evaluation
 
 # 1. Cargar la base desde la carpeta donde está este script
-ruta_csv = Path(__file__).resolve().with_name("datos_modelos_enriquecido.csv")
+ruta_csv = Path(__file__).resolve().with_name("datos_modelos_enriquecido_nuevo.csv")
 datos = pd.read_csv(ruta_csv)
 
 # Variación anual del IPC nacional a diciembre, en porcentaje.
@@ -163,8 +163,8 @@ entrenamiento = datos.loc[datos["year_radica"].le(2021)].copy()
 validacion = datos.loc[datos["year_radica"].eq(2022)].copy()
 
 # Objetivo en millones de pesos de diciembre de 2023.
-y_train = entrenamiento[objetivo] / 1_000_000
-y_valid = validacion[objetivo] / 1_000_000
+y_train = entrenamiento[objetivo]
+y_valid = validacion[objetivo]
 
 # Categorías definidas únicamente con el entrenamiento.
 tipo_municipio = pd.CategoricalDtype(
@@ -197,10 +197,10 @@ for nombre, variables in variantes.items():
 
     modelo = LGBMRegressor(
         objective="regression_l1",
-        n_estimators=300,
-        learning_rate=0.05,
+        n_estimators=100,
+        learning_rate=0.1,
         num_leaves=15,
-        max_depth=4,
+        max_depth=5,
         min_child_samples=100,
         reg_lambda=5,
         random_state=42,
