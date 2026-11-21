@@ -1,0 +1,13 @@
+{
+  "mae_modelo_pesos": 101027881.79846862,
+  "mae_mediana_municipal_pesos": 102306524.52965066,
+  "reduccion_mae_pesos": 1278642.7311820388,
+  "reduccion_mae_pct": 1.2498154316750942,
+  "error_mediano_pesos": 59324480.1490991,
+  "p90_error_pesos": 187107192.90362123,
+  "rmse_pesos": 942408473.1749094,
+  "r2": -0.0016784366842981235,
+  "mae_prueba_pesos": 101027881.79846862,
+  "segundos_ajuste_y_prediccion": 66.1406857999973,
+  "brecha_primal_dual": 4.107825191113079e-14
+}
