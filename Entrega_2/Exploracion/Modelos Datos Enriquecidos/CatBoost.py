@@ -11,7 +11,7 @@ from time import perf_counter
 from catboost import CatBoostRegressor
 
 # 1. Cargar la base desde la carpeta donde está este script
-ruta_csv = Path(__file__).resolve().with_name("datos_modelos_enriquecido.csv")
+ruta_csv = Path(__file__).resolve().with_name("datos_modelos_enriquecido_nuevo.csv")
 datos = pd.read_csv(ruta_csv)
 
 # Variación anual del IPC nacional a diciembre, en porcentaje.
@@ -193,10 +193,10 @@ for nombre, variables in variantes.items():
 
     modelo = CatBoostRegressor(
         loss_function="MAE",
-        iterations=500,
-        depth=4,
-        learning_rate=0.05,
-        l2_leaf_reg=5,
+        iterations=600,
+        depth=5,
+        learning_rate=0.1,
+        l2_leaf_reg=6,
         random_seed=42,
         thread_count=4,
         allow_writing_files=False,

@@ -6,9 +6,10 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 
-ruta_csv = Path(__file__).resolve().with_name("datos_modelos_enriquecido.csv")
+ruta_csv = Path(__file__).resolve().with_name("datos_modelos_enriquecido_nuevo.csv")
 
-objetivo = "valor_real_2023"
+claves = ["municipio", "year_radica"]
+
 
 variables_registro = [
     "municipio",
@@ -23,8 +24,46 @@ variables_dane = [
     "elic_unidades_vivienda_nueva_lag1",
 ]
 
+datos = pd.read_csv(r"C:\Users\jsvic\OneDrive\Documentos\GitHub\Despliegue de soluciones\Proyecto Inmobiliario\proyecto-inmobiliario-dsa\Entrega_2\Exploracion\datos_modelos_enriquecido_nuevo.csv", usecols=columnas)
+
+
+# Variación anual del IPC nacional a diciembre, en porcentaje.
+ipc_anual_pct = pd.Series({
+    2016: 5.75,
+    2017: 4.09,
+    2018: 3.18,
+    2019: 3.80,
+    2020: 1.61,
+    2021: 5.62,
+    2022: 13.12,
+    2023: 9.28,
+})
+
+anio_base = 2023
+factor_por_anio = pd.Series({
+    anio: (1 + ipc_anual_pct.loc[anio + 1:anio_base] / 100).prod()
+    for anio in range(2015, anio_base + 1)
+})
+
+filtro_monetario = (
+    datos["valor"].gt(0)
+    & datos["tiene_mas_de_un_valor"].eq(0)
+)
+datos = datos.loc[filtro_monetario].copy()
+datos["factor_ipc"] = datos["year_radica"].map(factor_por_anio)
+
+if datos["factor_ipc"].isna().any():
+    raise ValueError("Hay años de radicación sin factor de ajuste por IPC.")
+
+datos["valor_cop_dic2023"] = (
+    datos["valor"] * datos["factor_ipc"]
+)
+
+
+
+objetivo = "valor_cop_dic2023"
+
 columnas = [*variables_registro, *variables_dane, objetivo]
-datos = pd.read_csv(r"C:\Users\jsvic\OneDrive\Documentos\GitHub\Despliegue de soluciones\Proyecto Inmobiliario\proyecto-inmobiliario-dsa\Entrega_2\Exploracion\datos_modelos_enriquecido.csv", usecols=columnas)
 
 entrenamiento = datos.loc[datos["year_radica"].le(2022)]
 validacion = datos.loc[datos["year_radica"].eq(2023)]
