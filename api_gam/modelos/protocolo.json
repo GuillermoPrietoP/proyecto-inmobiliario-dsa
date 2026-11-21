@@ -1,0 +1,42 @@
+{
+  "modelo": "gam_cuantilico_sin_apertura",
+  "alpha": 0.01,
+  "cuantil": 0.5,
+  "n_knots": 4,
+  "grado_spline": 2,
+  "escala_objetivo": 100000000.0,
+  "filas": 273586,
+  "sha256_datos": "bcdbe957345a3b99844002492ec12c0c87717dbaf7b65d6017507ea9f8107e57",
+  "ipc_pct": {
+    "2016": 5.75,
+    "2017": 4.09,
+    "2018": 3.18,
+    "2019": 3.8,
+    "2020": 1.61,
+    "2021": 5.62,
+    "2022": 13.12,
+    "2023": 9.28
+  },
+  "factores_dic2023": {
+    "2015": 1.5640295672639464,
+    "2016": 1.4789877704623604,
+    "2017": 1.420874022924739,
+    "2018": 1.3770827901964904,
+    "2019": 1.3266693547172352,
+    "2020": 1.305648415232,
+    "2021": 1.23617536,
+    "2022": 1.0928,
+    "2023": 1.0
+  },
+  "sin_recortar_extremos": true,
+  "criterio": "Candidato exploratorio. Parámetros congelados; no seleccionar usando 2023.",
+  "reserva": "2022 y 2023 ya se observaron en el proyecto. Evaluación retrospectiva.",
+  "restriccion": "Revisar error por municipio; no garantiza rentabilidad ni avalúo individual.",
+  "versiones": {
+    "python": "3.11.9",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "sklearn": "1.8.0",
+    "scipy": "1.17.0"
+  }
+}
