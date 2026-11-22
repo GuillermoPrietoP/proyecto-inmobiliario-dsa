@@ -42,32 +42,6 @@ El contrato es experimental: antes de diseñar el formulario definitivo, confirm
 
 GET /health informa si el modelo está cargado. GET /metadata informa alcance y municipios. Entradas inválidas devuelven 422. Un fallo de inferencia devuelve 500 sin exponer datos internos.
 
-## Conexión con cualquier tablero
-
-La URL de la API se configura en el tablero; no depende de su herramienta. Desde JavaScript:
-
-```javascript
-const apiBase = "http://localhost:8001"; // Sustituir por el servidor desplegado.
-const respuesta = await fetch(`${apiBase}/predict`, {
-  method: "POST",
-  headers: {"Content-Type": "application/json"},
-  body: JSON.stringify(operacion) // Mismos campos que ejemplo.json.
-});
-const resultado = await respuesta.json();
-if (!respuesta.ok) throw new Error(JSON.stringify(resultado.detail));
-console.log(resultado.prediccion_cop_dic2023);
-```
-
-`localhost` funciona solo en la misma computadora que ejecuta la API. Un tablero público necesita una dirección pública accesible; si usa HTTPS, la API también debe ofrecer HTTPS para consultas desde navegador. El despliegue no se realizó como parte de este paquete.
-
-Para habilitar el origen real del tablero, configurar CORS_ORIGINS (sin barra final; varios orígenes separados por coma). Por defecto se permiten localhost:3000 y localhost:8501. Ejemplo PowerShell antes de arrancar:
-
-```powershell
-$env:CORS_ORIGINS="https://tablero-del-equipo.example"
-```
-
-En Docker pasar `-e CORS_ORIGINS=https://tablero-del-equipo.example` antes del nombre de imagen. CORS no es autenticación.
-
 ## Pruebas
 
 ```powershell
@@ -117,5 +91,3 @@ Pruebas realizadas en AWS:
 
 El acceso depende de que la instancia y el laboratorio estén activos.
 La IP pública puede cambiar al detener e iniciar la instancia.
-
-La integración con el tablero está pendiente.
