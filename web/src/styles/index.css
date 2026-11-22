@@ -1,0 +1,101 @@
+@import 'tailwindcss';
+
+/* Tokens visuales extraídos de Mockup_Prototipo_DSA.pptx */
+@theme {
+  --color-navy: #173b61;
+  --color-navy-700: #1f4d7d;
+  --color-navy-50: #eef3f9;
+  --color-slate-mock: #617d9c;
+  --color-lightblue: #bfd4e7;
+  --color-blue-mock: #2e86d1;
+  --color-green-mock: #2bb07f;
+  --color-orange-mock: #ff8a28;
+  --color-purple-mock: #6f63c7;
+  --color-red-mock: #c8453c;
+  --color-line: #e5eaf0;
+  --color-canvas: #f6f8fb;
+  --color-surface: #ffffff;
+
+  --font-sans: Aptos, 'Segoe UI', system-ui, Inter, -apple-system, sans-serif;
+
+  --radius-card: 14px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 1px 2px rgb(23 59 97 / 0.04), 0 4px 14px rgb(23 59 97 / 0.05);
+  --shadow-pop: 0 8px 30px rgb(23 59 97 / 0.14);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-canvas);
+    color: var(--color-navy);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-blue-mock);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  ::-webkit-scrollbar { height: 10px; width: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--color-lightblue); border-radius: 999px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+}
+
+@layer components {
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+
+  .card-pad { padding: 1.1rem 1.25rem; }
+
+  .h1 { font-size: 1.6rem; }
+  .h2 { font-size: 1.25rem; }
+  .h3 { font-size: 1.0625rem; }
+  .nota { font-size: 0.78rem; color: var(--color-slate-mock); line-height: 1.5; }
+  .label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-slate-mock); }
+
+  .tabla-densa th, .tabla-densa td { padding: 0.5rem 0.7rem; }
+
+  .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  .enlace {
+    color: var(--color-blue-mock);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .enlace:hover { color: var(--color-navy); }
+}
+
+/* Recharts: tipografía y foco coherentes con el sistema de diseño */
+.recharts-wrapper, .recharts-surface { font-family: var(--font-sans); }
+.recharts-cartesian-axis-tick text { fill: var(--color-slate-mock); font-size: 11px; }
+.recharts-tooltip-wrapper { outline: none; }

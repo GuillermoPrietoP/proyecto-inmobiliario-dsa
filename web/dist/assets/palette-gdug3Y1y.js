@@ -1,0 +1,1 @@
+const a={navy:"#173B61",slate:"#617D9C",lightblue:"#BFD4E7",blue:"#2E86D1",green:"#2BB07F",orange:"#FF8A28",purple:"#6F63C7",line:"#E5EAF0"},n={armenia:a.blue,manizales:a.navy,pereira:a.green,dosquebradas:a.orange,"santa-rosa-de-cabal":a.purple,calarca:a.slate};function r(e){return n[e]??a.slate}export{a as C,r as c};
