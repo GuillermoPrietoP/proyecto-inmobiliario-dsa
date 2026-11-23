@@ -1,4 +1,5 @@
 [core]
-    remote = almacenamiento_s3
-['remote "almacenamiento_s3"']
+    remote = s3datos
+['remote "s3datos"']
     url = s3://miad-proyecto-inmobiliario/dvc-storage
+    region = us-east-1
